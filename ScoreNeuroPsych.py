@@ -21,16 +21,18 @@ import glob
 import datetime
 import collections
 
-import ProcessNeuroPsychFunctions
-import ProcessBehavioralFunctions
-
 # What folder is this file in?
 dir_path = os.path.dirname(os.path.realpath(__file__))
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
 print(dir_path)
-sys.path.append(os.path.join(dir_path,'..','ConfigFiles'))
+# This is expecting this repo to sit next to the repo with the task code
+sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
+sys.path.append(os.path.join(dir_path, 'code'))
+
+import ProcessNeuroPsychFunctions
+import ProcessBehavioralFunctions
 import NeuropsychDataFolder
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
