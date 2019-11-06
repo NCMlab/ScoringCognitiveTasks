@@ -54,6 +54,4 @@ for i in data:
     print(p)
 data[5]['pages'][0]['questions'][0]['answers'][0]['text']
 
-answer_dict['507273538']['text']
-
-page['questions'][0]['answers']
+# 
