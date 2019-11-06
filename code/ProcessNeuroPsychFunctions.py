@@ -510,24 +510,28 @@ def ProcessSRTRecog(Data):
     return Out
 
 def ProcessSRTDelay(Data):
-    # Pull out the data and convert it to integers
-    res = map(int,Data['Trial01'][0:12])
-    # Convert this to a list
-    a = list(res)
-    # Convert to an array and count the nonzero values
-    DelayedRecall = sum(np.array(a)>0)
-    # DelayedRecall = sum(Data['Trial01'][0:12]!=0)
-    sum(np.array(a)>0)
-    
-    # Find intrusions
-    i1 = (Data['Index'] == 'Intrusions') &  (Data['Trial01'].notnull())
-    # or 
-    i2 = (Data['Index'].isnull()) &  (Data['Trial01'].notnull())
-    # Count intrusions
-    Nintr = len(np.where(i1)[0]) + len(np.where(i2)[0])
     Out = collections.OrderedDict()
-    Out['Recall'] = DelayedRecall
-    Out['Nintr'] = Nintr
+    if len(Data) > 0:
+        # Pull out the data and convert it to integers
+        res = map(int,Data['Trial01'][0:12])
+        # Convert this to a list
+        a = list(res)
+        # Convert to an array and count the nonzero values
+        DelayedRecall = sum(np.array(a)>0)
+        # DelayedRecall = sum(Data['Trial01'][0:12]!=0)
+        sum(np.array(a)>0)
+        
+        # Find intrusions
+        i1 = (Data['Index'] == 'Intrusions') &  (Data['Trial01'].notnull())
+        # or 
+        i2 = (Data['Index'].isnull()) &  (Data['Trial01'].notnull())
+        # Count intrusions
+        Nintr = len(np.where(i1)[0]) + len(np.where(i2)[0])
+        Out['Recall'] = DelayedRecall
+        Out['Nintr'] = Nintr
+    else:
+        Out['Recall'] = -9999
+        Out['Nintr'] = -9999
     return Out
     
 def ProcessNBack(Data):
