@@ -37,6 +37,7 @@ def ProcessVSTMBlockv2(Data, CapacityData):
             for index, row in temp.iterrows():
                 if row['Resp'] == -99:
                     print('Time out!')
+                    print(index)
                     temp = temp.drop(index)
             # find acc
             Acc = (temp['Corr'].mean())

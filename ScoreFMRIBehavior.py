@@ -17,9 +17,7 @@ import numpy as np
 import glob
 import datetime
 import collections
-import ProcessNeuroPsychFunctions
-import ProcessBehavioralFunctions
-import ScoreNeuroPsych
+
 # What folder is this file in?
 dir_path = os.path.dirname(os.path.realpath(__file__))
 # This will load the config file containing the location of the data folder
@@ -27,6 +25,11 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 # The GUI checks to see if thie config file exists. If it does not then it is created.
 print(dir_path)
 sys.path.append(os.path.join(dir_path,'..','ConfigFiles'))
+sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
+sys.path.append(os.path.join(dir_path, 'code'))
+import ProcessNeuroPsychFunctions
+import ProcessBehavioralFunctions
+import ScoreNeuroPsych
 import NeuropsychDataFolder
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder

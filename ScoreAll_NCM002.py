@@ -51,9 +51,10 @@ column_names[0] = 'PartID'
 NPData.columns = column_names
 # Set the index in NP
 NPData = NPData.set_index('PartID')
+
 # Change index type
-NPData.index = NPData.index.astype(int64)
-DemogAndNP = DemogData.AllParts.merge(NPData, left_on = 'PartID', right_on = 'PartID')
-DemogAndNP.to_csv(FileName, index = True, float_format='%.3f') 
+# NPData.index = NPData.index.astype(int64)
+# DemogAndNP = DemogData.AllParts.merge(NPData, left_on = 'PartID', right_on = 'PartID')
+# DemogAndNP.to_csv(FileName, index = True, float_format='%.3f') 
 
 # Merge Demog and fMRI
