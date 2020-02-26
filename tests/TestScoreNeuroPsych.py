@@ -27,10 +27,10 @@ import NeuropsychDataFolder
 
 
 # VisitFolder = '/Users/jasonsteffener/Dropbox/steffenercolumbia/Projects/MyProjects/NeuralCognitiveMapping/NeuroPsychData/990123454/2019_May_13_0930_V001'
-subid = '2002036'
-Visit = '2019_Oct_28_0933_V001'
+subid = '2002010'
+Visit = '2019_Aug_23_1718_V001'
 VisitFolder = os.path.join(NeuropsychDataFolder.NeuropsychDataFolder, subid, Visit)
 
-Data = ScoreNeuroPsych.ReadFile(VisitFolder, subid, 'SRT_DelRecall')
-ProcessNeuroPsychFunctions.ProcessSRTDelay(Data)
+Data = ScoreNeuroPsych.ReadFile(VisitFolder, subid, 'VSTM_Block_MRIRun2')
+ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(Data,4)
 

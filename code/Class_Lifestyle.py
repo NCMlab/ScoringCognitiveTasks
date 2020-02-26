@@ -43,6 +43,15 @@ class Lifestyle(object):
         outDict['SlpLegProbCount'] = self.SlpLegProbCount
         outDict['SlpLegDisappear'] = self.SlpLegDisappear
         outDict['SlpLegNight'] = self.SlpLegNight
+        outDict['PAWalk'] = self.PAWalk
+        outDict['PAJog'] = self.PAJog
+        outDict['PARun'] = self.PARun
+        outDict['PABike'] = self.PABike
+        outDict['PAAerobic'] = self.PAAerobic
+        outDict['PASwim'] = self.PASwim
+        outDict['PATennis'] = self.PATennis
+        outDict['PALowInt'] = self.PALowInt
+        outDict['PAStairs'] = self.PAStairs
         
         return outDict
 
@@ -76,6 +85,8 @@ class Lifestyle(object):
         self.ScoreIADL(OneRow[IADL])
         Sleep = slice(11,30)
         self.ScoreSleep(OneRow[Sleep])
+        PA = slice(364,375)
+        self.ScorePhysicalAvtivity(OneRow[PA])
 
     def ScoreSleep(self, SleepData):
         # How satisfied or dissatisfied are you with your current sleep pattern?
@@ -367,5 +378,16 @@ class Lifestyle(object):
 #     GDS = slice(222, 252)
 #     ScoreGeriatricDepressionIndex(i[GDS])
 
+# Physical Activity
+    def ScorePhysicalAvtivity(self, OneRowPAData):    
+        self.PAWalk = OneRowPAData[0]
+        self.PAJog = OneRowPAData[1]
+        self.PARun = OneRowPAData[2]
+        self.PABike = OneRowPAData[3]
+        self.PAAerobic = OneRowPAData[5]
+        self.PASwim = OneRowPAData[6]
+        self.PATennis = OneRowPAData[7]
+        self.PALowInt = OneRowPAData[8]
+        self.PAStairs = OneRowPAData[10]
 
         

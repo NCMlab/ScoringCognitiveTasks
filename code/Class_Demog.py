@@ -36,7 +36,7 @@ class Demograhics(object):
         self.Sex = DemoDataRow[12]
         self.Gender = DemoDataRow[14]
         # Map the education onto years
-        self.EducationMapping(DemoDataRow[64])
+        self.EducationMapping(DemoDataRow[65])
   
     def EducationMapping(self, EduData):
         """
