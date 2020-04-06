@@ -34,3 +34,4 @@ VisitFolder = os.path.join(NeuropsychDataFolder.NeuropsychDataFolder, subid, Vis
 Data = ScoreNeuroPsych.ReadFile(VisitFolder, subid, 'VSTM_Block_MRIRun2')
 ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(Data,4)
 
+

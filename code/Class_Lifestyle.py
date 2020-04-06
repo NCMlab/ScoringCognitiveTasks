@@ -66,7 +66,6 @@ class Lifestyle(object):
         # Set the index 
         self.AllLife = AllLife.set_index('PartID')    
         
-            
     def ProcessOneRowData(self, OneRow):
         self.TestDate = parse(OneRow[2])
         self.PartID = int(OneRow[9])
@@ -390,4 +389,8 @@ class Lifestyle(object):
         self.PALowInt = OneRowPAData[8]
         self.PAStairs = OneRowPAData[10]
 
-        
+# Social Participation
+     def SocialParticipation(self, OneRowSPData):
+        # Provide a measure of engagement Yes/No
+        # Provide a frequency score 
+         pass   
