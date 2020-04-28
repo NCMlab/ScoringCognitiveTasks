@@ -52,7 +52,9 @@ class Lifestyle(object):
         outDict['PATennis'] = self.PATennis
         outDict['PALowInt'] = self.PALowInt
         outDict['PAStairs'] = self.PAStairs
-        
+        outDict['TotalLone'] = self.TotalLone
+        outDict['EmotLone'] = self.EmotLone
+        outDict['SocLone'] = self.SocLone
         return outDict
 
     def ProcessData(self, LifeData):
@@ -86,7 +88,10 @@ class Lifestyle(object):
         self.ScoreSleep(OneRow[Sleep])
         PA = slice(364,375)
         self.ScorePhysicalAvtivity(OneRow[PA])
+        LO = slice(55,61)
+        self.ScoreLoneliness(OneRow[LO])
 
+# Sleep Pattern
     def ScoreSleep(self, SleepData):
         # How satisfied or dissatisfied are you with your current sleep pattern?
         # 1 Very Satisfied
@@ -149,7 +154,7 @@ class Lifestyle(object):
         # Are these uncomfortable feelings, or this urge to move, worse in the evening or at night compared with the morning?
         self.SlpLegNight = SleepData[18]
         
-        
+# Instrumental Activities of Daily Living        
     def ScoreIADL(self, IADLData):
         # Questions about:
         # Telephone
@@ -280,7 +285,61 @@ class Lifestyle(object):
         elif (Data[Columns[0]] == '1' or Data[Columns[1]] == '1' or Data[Columns[2]] == '1'):
             Missing = 0    
         return Missing
+
+
+    def ScoreLoneliness(self, LoneData):
+        # These questions have responses such as: Yes/More or less/No
+        #(“yes!” “yes,” “more or less,” “no,” and “no!”
+        # These responses are mapped onto the numbers: 1, 2, 3, 4, 5
+        Loneliness = np.asarray([int(i) for i in LoneData])
+        # count the number of responses that are positive or negative
+        # Best case, the value is ZERO
+        # Worst case, the value is SIX
+        #EmotionalSubscale = [0, 1, 2]
+        EmotionalSubscale = np.sum(Loneliness[0:3]<4)
+        #SocialSubscale = [3, 4, 5]
+        SocialSubscale = np.sum(Loneliness[3:6]>2)
+        TotalLoneliness = EmotionalSubscale + SocialSubscale
+        self.TotalLone = TotalLoneliness
+        self.EmotLone = EmotionalSubscale
+        self.SocLone = SocialSubscale
+
+
+# Subjective Cognitive Decline                
+    def SubjectCognitiveDecline(self, SCDdata1, SCDdata2):
+        # The responses are spreadover two sections of the data file
+        # Sum up the number of yes answers
+        # 1 - Yes
+        # 2 - No
+        # 3 - I don't know
+        # 4 - I prefer not to answer
+        NumberOfYeses = 0
+        for index in SCDdata1:
+            if index == '1':
+                NumberOfYeses += 1
+        for index in SCDdata2:
+            if index == '1':
+                NumberOfYeses += 1
+        return NumberOfYeses 
         
+# Social Participation
+#   
+# 
+#     # Social Participation
+#     # I am not sure how to score this
+#     # (109, 147), skip 126
+#     #
+# Social Participation
+    def SocialParticipation(self, OneRowSPData):
+        # Provide a measure of engagement Yes/No
+        # Provide a frequency score 
+         pass   
+
+# Social Networks
+#     # Social Networks
+#     # 149, 198, skip 195
+
+# Depression
     def ScoreBeckDepressionIndex(self, BDIData):
         """
         INTERPRETING THE BECK DEPRESSION INVENTORY (BDI-II)
@@ -309,8 +368,7 @@ class Lifestyle(object):
             BDIscore = sum(BDIData) - 21
             #BDIscore = sum(map(int, np.array(BDIData)))-21
         return BDIscore
-            
-            
+                        
     def ScoreGeriatricDepressionIndex(self, GDSData):
         """ Yes is saved as a ONE
         No is saved as a TWO
@@ -330,54 +388,12 @@ class Lifestyle(object):
             # How does this compare to the answer key
             GDSscore = sum(GDSAnswerKey==GDSData)
         return GDSscore
-    
-    def SexMapping(Value): 
-        pass
-    
-    def GenderMapping():
-        pass
         
-    def SubjectCognitiveDecline(self, SCDdata1, SCDdata2):
-        # The responses are spreadover two sections of the data file
-        # Sum up the number of yes answers
-        # 1 - Yes
-        # 2 - No
-        # 3 - I don't know
-        # 4 - I prefer not to answer
-        NumberOfYeses = 0
-        for index in SCDdata1:
-            if index == '1':
-                NumberOfYeses += 1
-        for index in SCDdata2:
-            if index == '1':
-                NumberOfYeses += 1
-        return NumberOfYeses 
-        
-#         # Instrucmental Activities of Daily Living 
-#     IADL = slice(32, 53)
-#     # Loneliness 
-#     # These questions have responses such as: Yes/More or less/No
-#     Loneliness = slice(55, 60)
-#   
-#     # Subjective Cognitive Decline
-#     # These questions have responses such as: Yes/No/I don't know/Prefer not to answer
-#     SCD1 = slice(65,69)
-#     SCD2 = slice(89, 107)
-#     SCDscore = SubjectCognitiveDecline(i[SCD1], i[SCD2])
-# 
-#     # Social Participation
-#     # I am not sure how to score this
-#     # (109, 147), skip 126
-#     #
-#     # Social Networks
-#     # 149, 198, skip 195
-#     # Depression Scale
-#     BDS = slice(201, 222)
-#     # ScoreBeckDepressionIndex(i[BDS])
-#     GDS = slice(222, 252)
-#     ScoreGeriatricDepressionIndex(i[GDS])
+# Nutrition
 
-# Physical Activity
+# Language        
+
+# Health >>>  Physical Activity
     def ScorePhysicalAvtivity(self, OneRowPAData):    
         self.PAWalk = OneRowPAData[0]
         self.PAJog = OneRowPAData[1]
@@ -388,9 +404,16 @@ class Lifestyle(object):
         self.PATennis = OneRowPAData[7]
         self.PALowInt = OneRowPAData[8]
         self.PAStairs = OneRowPAData[10]
+    
+    def SexMapping(Value): 
+        pass
+    
+    def GenderMapping():
+        pass
+        
+    
+        
 
-# Social Participation
-     def SocialParticipation(self, OneRowSPData):
-        # Provide a measure of engagement Yes/No
-        # Provide a frequency score 
-         pass   
+
+
+

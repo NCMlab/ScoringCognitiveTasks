@@ -38,10 +38,34 @@ else:
 
 
 
+# From the Neuropsych folder change to the SurveyMonkey Folder
+SurveyMonkeyDataFolder = os.path.split(AllInDataFolder)[0]
+SurveyMonkeyDataFolder = os.path.join(SurveyMonkeyDataFolder, 'SurveyMonkey')
+
+# At home lifestyle questionnaire
+LifestyleFileName = 'Royal LifestyleBehavior.csv'
+# At the lab demographics questionnaire
+DemographicsFileName = 'Royal Participant Questionnaire.csv'
+# At the lab PANAS questionnaire
+PANASFileName = 'PANAS Questionnaire.csv'
+LifestyleInputFile = os.path.join(SurveyMonkeyDataFolder, LifestyleFileName)
+DemographicsInputFile = os.path.join(SurveyMonkeyDataFolder, DemographicsFileName)
+PANASInputFile = os.path.join(SurveyMonkeyDataFolder, PANASFileName)
+
+
+LifeH1, LifeH2, LifeData = ScoreSurveyMonkey_NCM002.ReadSMFileAsCSV(LifestyleInputFile)
+
+OneRow = LifeData[9]
+
 # NPData = ScoreNeuroPsych.main()
 # BUNPData = NPData
 # FMRIData = ScoreFMRIBehavior.main()
+
+
 LifeData, DemogData = ScoreSurveyMonkey_NCM002.main()
+
+
+
 
 # Merge the data files together
 # Merge Demog, NP and Life
