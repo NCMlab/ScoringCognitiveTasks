@@ -23,6 +23,7 @@ import collections
 
 # What folder is this file in?
 dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path =  '/Users/jasonsteffener/Documents/GitHub/CognitiveTasks'
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
@@ -73,11 +74,15 @@ def CycleOverDataFolders():
     ListOfDict = []
     # get all sub dirs
     subdirs = glob.glob(os.path.join(AllInDataFolder,'*/'))
+
     for subdir in subdirs:
+        print(subdir)
         # check subdir based on some criteria
         CurDir = os.path.split(subdir)[0]
         CurDir = os.path.split(CurDir)[-1]
         if CurDir.isdigit():
+            
+            print("FOUND FOLDER: %s"%(CurDir))
             #enter the directory and find visit folders
 
             VisitFolders = glob.glob(os.path.join(subdir,'*/'))
@@ -179,6 +184,11 @@ def LoadRawData(VisitFolder, subid):
     Results['Ant'] = ProcessNeuroPsychFunctions.ProcessAntonym(Data)
     print('\tAntonym loaded')
     
+    # NART
+    Data = ReadFile(VisitFolder, subid, 'Vocab_NART')
+    Results['NART'] = ProcessNeuroPsychFunctions.ProcessNART(Data)
+    print('\tNART loaded')
+
     # Digit Span
     # Forward
     Data = ReadFile(VisitFolder, subid, 'DigitSpan_Forward')

@@ -20,12 +20,13 @@ import collections
 
 # What folder is this file in?
 dir_path = os.path.dirname(os.path.realpath(__file__))
+Task_path =  '/Users/jasonsteffener/Documents/GitHub/CognitiveTasks'
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
 print(dir_path)
-sys.path.append(os.path.join(dir_path,'..','ConfigFiles'))
-sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
+sys.path.append(os.path.join(Task_path,'ConfigFiles'))
+#sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
 sys.path.append(os.path.join(dir_path, 'code'))
 import ProcessNeuroPsychFunctions
 import ProcessBehavioralFunctions
@@ -34,7 +35,7 @@ import NeuropsychDataFolder
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
 # Where to put the summary data
-AllOutDataFolder = os.path.join(os.path.split(AllInDataFolder)[0], 'SummaryData')
+AllOutDataFolder = os.path.join(os.path.split(AllInDataFolder)[0])
 
 def main():
     # Cycle over all data folders and load them up
@@ -138,51 +139,70 @@ def LoadRawData(VisitFolder, subid):
         
     # DMS
     Data1 = ReadFile(VisitFolder, subid, 'DMS_Block_MRIRun1')
-    if len(Data1) > 0:             
-        CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
-        Data1 = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(Data1)
-        tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(Data1, CapacityData)
-        Results['DMSMRI1'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
-        print('\tDMS loaded')
+    if len(Data1) > 0:        
+        try:
+            CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
+            Data1 = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(Data1)
+            tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(Data1, CapacityData)
+            Results['DMSMRI1'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
+            print('\tDMS loaded')
+        except:
+            pass
+            
           
     Data2 = ReadFile(VisitFolder, subid, 'DMS_Block_MRIRun2')
     if len(Data2) > 0:
-        CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
-        Data2 = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(Data2)
-        tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(Data2, CapacityData)
-        Results['DMSMRI2'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
-        print('\tDMS loaded')
+        try:
+            CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
+            Data2 = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(Data2)
+            tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(Data2, CapacityData)
+            Results['DMSMRI2'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
+            print('\tDMS loaded')
+        except:
+            pass
 
     if len(Data1) > 0 and len(Data2) > 0: 
         AllData = Data1.append(Data2)
         if len(AllData) > 0:
-            CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
-            AllData = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(AllData)
-            tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(AllData, CapacityData)
-            Results['DMSMRIAll'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
-            print('\tBoth DMS loaded')
+            try:
+                CapacityData = ReadFile(VisitFolder, subid, 'DMS_CAPACITY')    
+                AllData = ProcessNeuroPsychFunctions.CheckDMSDataFrameForLoad(AllData)
+                tempResults = ProcessNeuroPsychFunctions.ProcessDMSBlockv2(AllData, CapacityData)
+                Results['DMSMRIAll'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'DMS')    
+                print('\tBoth DMS loaded')
+            except:
+                pass
                 
     # VSTM
     VSTMData1 = ReadFile(VisitFolder, subid, 'VSTM_Block_MRIRun1')
     if len(VSTMData1) > 0:
-        CapacityData = ReadFile(VisitFolder, subid, 'VSTM_CAPACITY')            
-        tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMData1, CapacityData)
-        Results['VSTMMRI1'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
-        print('\tVSTM loaded')    
+        try:
+            CapacityData = ReadFile(VisitFolder, subid, 'VSTM_CAPACITY')            
+            tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMData1, CapacityData)
+            Results['VSTMMRI1'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
+            print('\tVSTM loaded')   
+        except:
+            pass
 
     VSTMData2 = ReadFile(VisitFolder, subid, 'VSTM_Block_MRIRun2')
     if len(VSTMData2) > 0:
-        CapacityData = ReadFile(VisitFolder, subid, 'VSTM_CAPACITY')            
-        tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMData2, CapacityData)
-        Results['VSTMMRI2'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
-        print('\tVSTM loaded')    
+        try:
+            CapacityData = ReadFile(VisitFolder, subid, 'VSTM_CAPACITY')            
+            tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMData2, CapacityData)
+            Results['VSTMMRI2'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
+            print('\tVSTM loaded') 
+        except:
+            pass
 
     if len(VSTMData1) > 0 and len(VSTMData2) > 0: 
         VSTMAllData = VSTMData1.append(VSTMData2)
         if len(VSTMAllData) > 0:
-            tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMAllData, CapacityData)
-            Results['VSTMMRIAll'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
-            print('\tVBoth VSTM loaded')    
+            try:
+                tempResults = ProcessNeuroPsychFunctions.ProcessVSTMBlockv2(VSTMAllData, CapacityData)
+                Results['VSTMMRIAll'] = ScoreNeuroPsych.Reorder_DMS_VSTM_Results(tempResults, 'VSTM')   
+                print('\tVBoth VSTM loaded')    
+            except:
+                pass
                             
     # N-Back
     Data1 = ReadFile(VisitFolder, subid, 'NBack_012012_MRIRun01')

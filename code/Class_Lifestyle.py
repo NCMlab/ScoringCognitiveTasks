@@ -291,15 +291,21 @@ class Lifestyle(object):
         # These questions have responses such as: Yes/More or less/No
         #(“yes!” “yes,” “more or less,” “no,” and “no!”
         # These responses are mapped onto the numbers: 1, 2, 3, 4, 5
-        Loneliness = np.asarray([int(i) for i in LoneData])
-        # count the number of responses that are positive or negative
-        # Best case, the value is ZERO
-        # Worst case, the value is SIX
-        #EmotionalSubscale = [0, 1, 2]
-        EmotionalSubscale = np.sum(Loneliness[0:3]<4)
-        #SocialSubscale = [3, 4, 5]
-        SocialSubscale = np.sum(Loneliness[3:6]>2)
-        TotalLoneliness = EmotionalSubscale + SocialSubscale
+        # Check to see if there are missing answers
+        if np.count_nonzero(LoneData) == len(LoneData):            
+            Loneliness = np.asarray([int(i) for i in LoneData])
+            # count the number of responses that are positive or negative
+            # Best case, the value is ZERO
+            # Worst case, the value is SIX
+            #EmotionalSubscale = [0, 1, 2]
+            EmotionalSubscale = np.sum(Loneliness[0:3]<4)
+            #SocialSubscale = [3, 4, 5]
+            SocialSubscale = np.sum(Loneliness[3:6]>2)
+            TotalLoneliness = EmotionalSubscale + SocialSubscale
+        else:
+            EmotionalSubscale = -9999
+            TotalLoneliness = -9999
+            SocialSubscale = -9999
         self.TotalLone = TotalLoneliness
         self.EmotLone = EmotionalSubscale
         self.SocLone = SocialSubscale

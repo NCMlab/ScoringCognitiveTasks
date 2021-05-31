@@ -286,6 +286,26 @@ def ProcessMatrices(Data):
         Out['NCorr'] = -9999       
     return Out
 
+def ProcessNART(Data):
+    if len(Data) > 0:
+        # How many trials were there?
+        NTrials = Data['key_resp_2.keys'].count()
+        # How many trials were marked as correct? This is a"left" response
+        NCorrect = np.count_nonzero(Data['key_resp_2.keys']=="left")
+        NErrors =  np.count_nonzero(Data['key_resp_2.keys']=="right")
+        Acc = NCorrect/NTrials
+        Out = collections.OrderedDict()
+        Out['Acc'] = Acc
+        Out['NCorrect'] = NCorrect
+        Out['NErrors'] = NErrors
+    else:
+        Out = collections.OrderedDict()
+        Out['Acc'] = -9999
+        Out['NCorrect'] = -9999
+        Out['NErrors'] = -9999
+    return Out
+    
+
 def ProcessStroopColor(Data):
     # Stroop color uses the shape color to determine the test colors which is the 
     # same as the TEXT color
@@ -417,7 +437,11 @@ def ProcessDigitSpanOneRow(Row, Dir):
         if i.isdigit():
             Test.append(int(i))
     # This is stored as a string
-    StrResp = str(int(Row['resp.keys']))
+    # Add chweck for no response
+    if np.isnan(Row['resp.keys']):
+        StrResp = ''
+    else:
+        StrResp = str(int(Row['resp.keys']))
     Resp = [];
     for i in StrResp:
         if i.isdigit():
