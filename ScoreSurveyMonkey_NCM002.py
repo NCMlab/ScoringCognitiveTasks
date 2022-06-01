@@ -8,6 +8,10 @@ from tkinter import messagebox
 import datetime
 # from dateutil.parser import parse
 import sys
+
+
+sys.path.insert(1,'/Users/jasonsteffener/Documents/GitHub/ScoringCognitiveTasks/code')
+sys.path.insert(1,'/Users/jasonsteffener/Documents/GitHub/CognitiveTasks/ConfigFiles')
 # import collections
 import glob
 import shutil
@@ -29,7 +33,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
 print(dir_path)
-sys.path.append(os.path.join(dir_path,'..','ConfigFiles'))
+# sys.path.append(os.path.join(dir_path,'..','ConfigFiles'))
+
+
 import NeuropsychDataFolder
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
@@ -65,20 +71,21 @@ def main():
     AllPANAS = Class_PANAS.PANAS()
     AllPANAS.ProcessDataFile(PANASData)
     # Create a file name for PANAS data 
-    UpdatedDataFileName = CreateOutFileName('NCM002_PANAS', AllOutDataFolder)
-    ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_PANAS')
-    # Write PANAS to file
-    WriteOutNewdataMoveOldData(AllPANAS.AllPANAS, UpdatedDataFileName, ExistingDataFileName)
+    # UpdatedDataFileName = CreateOutFileName('NCM002_PANAS', AllOutDataFolder)
+    # ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_PANAS')
+    # # Write PANAS to file
+    # WriteOutNewdataMoveOldData(AllPANAS.AllPANAS, UpdatedDataFileName, ExistingDataFileName)
+    # AllPANAS.AllParts.to_csv(UpdatedDataFileName)
     
     ## DEMOGRAPHICS
     AllDemog = Class_Demog.Demograhics()
     AllDemog.ProcessDataFile(DemoData)
     # Create a file name for Demog data 
-    UpdatedDataFileName = CreateOutFileName('NCM002_Demog', AllOutDataFolder)
-    ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_Demog')
-    # Write Demographics to file
-    WriteOutNewdataMoveOldData(AllDemog.AllParts, UpdatedDataFileName, ExistingDataFileName)
-    AllDemog.AllParts.to_csv(UpdatedDataFileName)
+    # UpdatedDataFileName = CreateOutFileName('NCM002_Demog', AllOutDataFolder)
+    # ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_Demog')
+    # # Write Demographics to file
+    # WriteOutNewdataMoveOldData(AllDemog.AllParts, UpdatedDataFileName, ExistingDataFileName)
+    # AllDemog.AllParts.to_csv(UpdatedDataFileName)
     
     
     ## LIFESTYLE
@@ -86,12 +93,16 @@ def main():
     AllLife.ProcessData(LifeData)
 
     # Create a file name for Demog data 
-    UpdatedDataFileName = CreateOutFileName('NCM002_Life', AllOutDataFolder)
-    ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_Life')
-    # Write Demographics to file
-    WriteOutNewdataMoveOldData(AllLife.AllLife, UpdatedDataFileName, ExistingDataFileName)
-    AllLife.AllLife.to_csv(UpdatedDataFileName)
-    return AllLife, AllDemog
+    # UpdatedDataFileName = CreateOutFileName('NCM002_Life', AllOutDataFolder)
+    # ExistingDataFileName = LocateOutDataFile(AllOutDataFolder,'NCM002_Life')
+    # # Write Demographics to file
+    # WriteOutNewdataMoveOldData(AllLife.AllLife, UpdatedDataFileName, ExistingDataFileName)
+    # AllLife.AllLife.to_csv(UpdatedDataFileName)
+    # Merge all together
+    # MM01 = pd.merge(left = AllDemog.AllParts, right = AllLife.AllLife, how = 'outer', left_on='PartID',right_on='PartID')
+    # MM02 = pd.merge(left = MM01, right = AllPANAS.AllPANAS, how = 'outer', left_on='PartID', right_on = 'PartID')
+    
+    return AllLife, AllDemog, AllPANAS
 
 def CreateOutFileName(BaseFileName, AllOutDataFolder):
     # Create a file to hold processed data using the time and date

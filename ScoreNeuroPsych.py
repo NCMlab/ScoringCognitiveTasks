@@ -46,23 +46,23 @@ def main():
     # Cycle over all data folders and load them up
     NewData = CycleOverDataFolders()
     # find the name of the existing results file
-    ExistingDataFileName = LocateOutDataFile()
-    print(ExistingDataFileName)
-    # Load the existing results file
-    if os.path.exists(ExistingDataFileName):
-        # Found the existing data file
-        OldData = LoadOutDataFile(ExistingDataFileName)
-        # created an updated results datafram, respectivein the "locked down" 
-        # data rows
-        UpdatedData = CreateUpdatedDataFrameOfResults(NewData, OldData)
-        # Create an updated output file name
-        UpdatedDataFileName = CreateOutFileName()
-        # write out the updated data and move the old data file
-        WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFileName)
-    else:
-        # There is no old data file
-        OldData = []
-        NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
+    # ExistingDataFileName = LocateOutDataFile()
+    # print(ExistingDataFileName)
+    # # Load the existing results file
+    # if os.path.exists(ExistingDataFileName):
+    #     # Found the existing data file
+    #     OldData = LoadOutDataFile(ExistingDataFileName)
+    #     # created an updated results datafram, respectivein the "locked down" 
+    #     # data rows
+    #     UpdatedData = CreateUpdatedDataFrameOfResults(NewData, OldData)
+    #     # Create an updated output file name
+    #     UpdatedDataFileName = CreateOutFileName()
+    #     # write out the updated data and move the old data file
+    #     WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFileName)
+    # else:
+    #     # There is no old data file
+    #     OldData = []
+    #     NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
     return NewData
     
 def CycleOverDataFolders():
@@ -76,11 +76,12 @@ def CycleOverDataFolders():
     subdirs = glob.glob(os.path.join(AllInDataFolder,'*/'))
 
     for subdir in subdirs:
-        print(subdir)
+        # print(subdir)
         # check subdir based on some criteria
         CurDir = os.path.split(subdir)[0]
         CurDir = os.path.split(CurDir)[-1]
-        if CurDir.isdigit():
+        # Do not checked folders that start with a 9 or and X
+        if CurDir.isdigit() and CurDir[0] != '9':
             
             print("FOUND FOLDER: %s"%(CurDir))
             #enter the directory and find visit folders
@@ -106,9 +107,11 @@ def CycleOverDataFolders():
                         FlatResults = ProcessBehavioralFunctions.FlattenDict(Results)
                         # add subid and visitid
                         FlatResults['AAsubid'] = subid
-                        FlatResults['AAVisid'] = Visid
+                        # FlatResults['AAVisid'] = Visid
                         FlatResults['AAChecked'] = 0
-                        ListOfDict.append(FlatResults)
+                        # Check to see if the results DF is empty or not
+                        if not CheckForEmpty(Results):
+                            ListOfDict.append(FlatResults)
             elif len(os.listdir(subdir)) > 0:
                 # This seems to be data in a subject folder with no visit folder
                 # Create the visit ID
@@ -120,7 +123,7 @@ def CycleOverDataFolders():
                 FlatResults = ProcessBehavioralFunctions.FlattenDict(Results)
                 # add subid and visitid
                 FlatResults['AAsubid'] = subid
-                FlatResults['AAVisid'] = Visid
+                # FlatResults['AAVisid'] = Visid
                 FlatResults['AAChecked'] = 0
                 ListOfDict.append(FlatResults)
                 
@@ -132,7 +135,7 @@ def CycleOverDataFolders():
     for col in df:
         ColNameList.append(col)
     # Now move the last three columns to the beginning
-    ItemsToMove = ['AAsubid', 'AAVisid', 'AAChecked']
+    ItemsToMove = ['AAsubid', 'AAChecked']
     count = 0
     for j in ItemsToMove:
         # Find the location of the item
@@ -143,6 +146,18 @@ def CycleOverDataFolders():
     df = df[ColNameList]
     return df
 
+def CheckForEmpty(Results):
+    # cycle over items
+    IsEmpty = True
+    for item in Results:
+        for j in Results[item]:
+            # Check if any are NOT -9999
+            if Results[item][j] != -9999:
+                print(Results[item])
+                IsEmpty = False
+    return IsEmpty
+    
+    
 def FindVisitIDFromFileNames(subdir):
     # Make a list of the files in the folder
     ListOfFiles = glob.glob(os.path.join(subdir,'*.csv'))
@@ -332,7 +347,12 @@ def ReadFile(VisitFolder, subid, TaskTag):
         # Read whole file into a dataframe
         # Note, in order for the data to be read as a dataframe all columns need to have headings.
         # If not an error is thrown
-        Data = pd.read_csv(InputFile)
+    
+        # Check to see what size the file is to make sure it is not empty
+        if os.stat(InputFile).st_size == 0:
+            print('File is empty')
+        else:
+            Data = pd.read_csv(InputFile)
         # If the data is to be read into a big list use this:
         #    fid = open(InputFile, 'r')
         #    Data = csv.reader(fid)

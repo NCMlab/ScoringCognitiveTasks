@@ -72,7 +72,7 @@ def CycleOverDataFolders():
         # check subdir based on some criteria
         CurDir = os.path.split(subdir)[0]
         CurDir = os.path.split(CurDir)[-1]
-        if CurDir.isdigit():
+        if CurDir.isdigit() and CurDir[0] != '9':
             #enter the directory and find visit folders
 
             VisitFolders = glob.glob(os.path.join(subdir,'*/'))
@@ -282,12 +282,19 @@ def ReadFile(VisitFolder, subid, TaskTag):
         SelectedFile = False
         print('Did not find any files!!!')
     if SelectedFile != False:
+        
+        
+        
         # Now open the file
         InputFile = os.path.join(VisitFolder, SelectedFile)
         # Read whole file into a dataframe
         # Note, in order for the data to be read as a dataframe all columns need to have headings.
         # If not an error is thrown
-        Data = pd.read_csv(InputFile)
+        # Check to see what size the file is to make sure it is not empty
+        if os.stat(InputFile).st_size == 0:
+            print('File is empty')
+        else:
+            Data = pd.read_csv(InputFile)
         # If the data is to be read into a big list use this:
         #    fid = open(InputFile, 'r')
         #    Data = csv.reader(fid)

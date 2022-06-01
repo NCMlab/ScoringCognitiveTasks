@@ -3,6 +3,7 @@ import os
 import sys
 import datetime
 import glob
+import pandas as pd
 
 # What folder is this file in?
 # dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -20,12 +21,15 @@ import NeuropsychDataFolder
 import ScoreNeuroPsych
 import ScoreFMRIBehavior
 import ScoreSurveyMonkey_NCM002
+
+
+
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
 # Where to put the summary data
 AllOutDataFolder = os.path.join(os.path.split(AllInDataFolder)[0], 'SummaryData')
 
-BaseFileName = 'NCM_Master_Demog_NP'
+BaseFileName = 'NCM_Master_'
 # What files exist with this name?
 Files = glob.glob(os.path.join(AllOutDataFolder, BaseFileName + '*.csv'))
 now = datetime.datetime.now()
@@ -38,24 +42,46 @@ else:
     FileName = Files[-1] 
 
 
-
+# Score NP Data
 NPData = ScoreNeuroPsych.main()
-BUNPData = NPData
+# Save NP Data
+NewOutFileName = BaseFileName + 'NPBeh' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+NPData.to_csv(FileName)
+
+
+
+# Score fMRI data
 FMRIData = ScoreFMRIBehavior.main()
-LifeData, DemogData = ScoreSurveyMonkey_NCM002.main()
+# Save fMRI data
+NewOutFileName = BaseFileName + 'NPfMRI' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+FMRIData.to_csv(FileName)
 
-# Merge the data files together
-# Merge Demog, NP and Life
-# Change name of index column for NP
-column_names = NPData.columns.values
-column_names[0] = 'PartID'
-NPData.columns = column_names
-# Set the index in NP
-NPData = NPData.set_index('PartID')
+# Score Survey Monkey Data
+LifeData, DemogData, PANASData = ScoreSurveyMonkey_NCM002.main()
 
-# Change index type
-# NPData.index = NPData.index.astype(int64)
-# DemogAndNP = DemogData.AllParts.merge(NPData, left_on = 'PartID', right_on = 'PartID')
-# DemogAndNP.to_csv(FileName, index = True, float_format='%.3f') 
+# Save Survey Monkey data
+NewOutFileName = BaseFileName + 'Questionnaires' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+LifeData.AllLife.to_csv(FileName)
+NewOutFileName = BaseFileName + 'PANAS' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+PANASData.AllPANAS.to_csv(FileName)
+NewOutFileName = BaseFileName + 'Demog' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+DemogData.AllParts.to_csv(FileName)
 
-# Merge Demog and fMRI
+# Merge all files together
+MM01 = pd.merge(left = DemogData.AllParts, right = LifeData.AllLife, how = 'outer', left_on='PartID',right_on='PartID')
+MM02 = pd.merge(left = MM01, right = PANASData.AllPANAS, how = 'outer', left_on='PartID', right_on = 'PartID')
+# Fix type of part id
+NPData['AAsubid'] = NPData['AAsubid'].astype('int64')
+MM03 = pd.merge(left = MM02, right = NPData, how = 'outer', left_on='PartID', right_on = 'AAsubid')
+FMRIData['AAsubid'] = FMRIData['AAsubid'].astype('int64')
+MM04 = pd.merge(left = MM03, right = FMRIData, how = 'outer', left_on='PartID', right_on = 'AAsubid')
+# Save
+
+NewOutFileName = BaseFileName + 'All' + NowString
+FileName = os.path.join(AllOutDataFolder, NewOutFileName)
+MM04.to_csv(FileName)

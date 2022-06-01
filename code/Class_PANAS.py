@@ -29,6 +29,7 @@ class PANAS(object):
         Watson, D., Clark, L. A., & Tellegen, A. (1988). Development and validation of brief measures of positive
         and negative affect: the PANAS scales. Journal of personality and social psychology, 54(6), 1063.
         """
+        print(OneRowOfData)
         self.PartID = int(OneRowOfData[9])
         TestDate = OneRowOfData[2]
         self.Session = int(OneRowOfData[10])
