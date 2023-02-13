@@ -23,7 +23,8 @@ import collections
 
 # What folder is this file in?
 dir_path = os.path.dirname(os.path.realpath(__file__))
-dir_path =  '/Users/jasonsteffener/Documents/GitHub/CognitiveTasks'
+#.-
+ArithmeticErrordir_path =  '/Users/NCMLab/Documents/GitHub/CognitiveTasks'
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
@@ -145,6 +146,61 @@ def CycleOverDataFolders():
     # Now apply these rearranged columns to the dataframe
     df = df[ColNameList]
     return df
+
+def ScoreOneSubject(subid):
+    subdir = os.path.join(AllInDataFolder, subid)
+    # print(subdir)
+    # check subdir based on some criteria
+   #  CurDir = os.path.split(subdir)[0]
+    # CurDir = os.path.split(CurDir)[-1]
+    CurDir = subdir
+   
+    
+    print("FOUND FOLDER: %s"%(CurDir))
+    #enter the directory and find visit folders
+
+    VisitFolders = glob.glob(os.path.join(subdir,'*/'))
+    # What if there are no visit folders?
+    # Then define teh visit as V001 and use a filename to idetify the visitid
+    # Check to see if there is a visiti folder in the subject folder and if there is 
+    # no visit folder, check to see if there are data files
+    if (len(VisitFolders) > 0): 
+        for visFold in VisitFolders:
+            CurVis = os.path.split(visFold)[0]
+            CurVis = os.path.split(CurVis)[-1]
+            
+            print(CurVis)
+            if CurVis[-4:-2] == 'V0':
+                # From the directory structre extract the subject ID and the visit ID
+                
+                Visid = CurVis
+                print('====================================')
+                print('%s, %s'%(subid, Visid))
+                # Load up the raw data from the files in the visit folder
+                Results = LoadRawData(os.path.join(AllInDataFolder, subid, Visid),subid)
+                # Results = LoadRawDataSHORT(os.path.join(AllOutDataFolder, subid, Visid),subid)
+                FlatResults = ProcessBehavioralFunctions.FlattenDict(Results)
+                # add subid and visitid
+                FlatResults['AAsubid'] = subid
+                # FlatResults['AAVisid'] = Visid
+                FlatResults['AAChecked'] = 0
+                # Check to see if the results DF is empty or not
+               
+    elif len(os.listdir(subdir)) > 0:
+        # This seems to be data in a subject folder with no visit folder
+        # Create the visit ID
+        subid = CurDir
+        Visid = FindVisitIDFromFileNames(subdir)
+        
+        # Load up the raw data from the files in the visit folder
+        Results = LoadRawData(os.path.join(AllInDataFolder, subid),subid)
+        FlatResults = ProcessBehavioralFunctions.FlattenDict(Results)
+        # add subid and visitid
+        FlatResults['AAsubid'] = subid
+        # FlatResults['AAVisid'] = Visid
+        FlatResults['AAChecked'] = 0
+       
+    return FlatResults
 
 def CheckForEmpty(Results):
     # cycle over items
