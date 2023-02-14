@@ -12,15 +12,15 @@ class PDF(fpdf.FPDF):
         super().__init__()
     def header(self):
         self.set_font('Arial', '', 12)
-        self.cell(0, 10, 'Header', 1, 1, 'C')
+        self.cell(0, 10, 'Neuropsychological Testing Summary Report', 1, 1, 'C')
     def footer(self):
         self.set_y(-15)
         self.set_font('Arial', '', 12)
-        self.cell(0, 10, 'This is a Footer', 1, 0, 'C')
+        self.cell(0, 10, 'Neurocognitive Mapping Laboratory, University of Ottawa, Canada', 1, 0, 'C')
 
 
 def MakeSummaryPDF(results):    
-    ch = 8
+    ch = 6
     pdf = PDF() # Instance of custom class
     pdf.add_page()
     pdf.set_font('Arial', 'B', 24)
@@ -151,18 +151,44 @@ def MakeSummaryPDF(results):
     pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['SRTDel_Nintr']), ln = 1)        
     pdf.cell(w = 80, h = ch, txt="   Recognition (max 12)", ln = 0)
     pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['SRTRecog_Hits']), ln = 1)    
-    
+    pdf.ln(ch)    
     pdf.set_font('Arial', 'B', 16)
     pdf.cell(w = 80, h = ch, txt="W Card Sorting Task", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "# Trials", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "# Errors", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "# Pers Errors", ln = 1)
+    pdf.cell(w = 40, h = ch, txt = "# Trials", ln = 0)
+    pdf.cell(w = 40, h = ch, txt = "# Errors", ln = 0)
+    pdf.cell(w = 40, h = ch, txt = "# Pers Errors", ln = 1)
     pdf.set_font('Arial', '', 12)
-    pdf.cell(w = 50, h = ch, txt = '', ln = 1)    
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['WCST_NTrials']), ln = 1)    
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['WCST_NErrors']), ln = 1)    
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['WCST_NPersErrors']), ln = 1)    
-        
-    
-    pdf.output(f'./example.pdf', 'F')
+    pdf.cell(w = 80, h = ch, txt = '', ln = 0)    
+    pdf.cell(w = 40, h = ch, txt = '{:d}'.format(results['WCST_NTrials']), ln = 0)    
+    pdf.cell(w = 40, h = ch, txt = '{:d}'.format(results['WCST_NErrors']), ln = 0)    
+    pdf.cell(w = 40, h = ch, txt = '{:d}'.format(results['WCST_NPersErrors']), ln = 1)    
+    pdf.ln(ch)    
+    pdf.set_font('Arial', 'B', 16)
+    pdf.cell(w = 30, h = ch, txt="N Back", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = "# of trials", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = "Hit Rate", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = "Hit RT", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = "F.A. Rate", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = "F.A. RT", ln = 1)
+    pdf.set_font('Arial', '', 12)
+    pdf.cell(w = 30, h = ch, txt = "   Load 0", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load00_N']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_HIT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_HitRT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_FA']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_FaRT']), ln = 1)
+    pdf.cell(w = 30, h = ch, txt = "   Load 1", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load01_N']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_HIT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_HitRT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_FA']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_FaRT']), ln = 1)
+    pdf.cell(w = 30, h = ch, txt = "   Load 2", ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load02_N']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_HIT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_HitRT']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_FA']), ln = 0)
+    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_FaRT']), ln = 1)    
+    fname_out = './' + results['subid'] + '_' + results['visitid'] + '.pdf'
+    pdf.output(fname_out, 'F')
     

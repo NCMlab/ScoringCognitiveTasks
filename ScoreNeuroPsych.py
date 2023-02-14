@@ -37,6 +37,8 @@ sys.path.append(os.path.join(dir_path, 'code'))
 import ProcessNeuroPsychFunctions
 import ProcessBehavioralFunctions
 import NeuropsychDataFolder
+import MakeSummarySheet
+
 # Load up the data location as a global variable
 AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
 # Where to put the summary data
@@ -100,6 +102,7 @@ def CycleOverDataFolders():
                     if CurVis[-4:-2] == 'V0':
                         # From the directory structre extract the subject ID and the visit ID
                         subid = CurDir
+                        ScoreOneSubject(subid)
                         Visid = CurVis
                         print('====================================')
                         print('%s, %s'%(subid, Visid))
@@ -201,7 +204,7 @@ def ScoreOneSubject(subid):
     FlatResults['subid'] = subid
         # FlatResults['AAVisid'] = Visid
     FlatResults['visitid'] = Visid
-       
+    MakeSummarySheet.MakeSummaryPDF(FlatResults)
     return FlatResults
 
 
