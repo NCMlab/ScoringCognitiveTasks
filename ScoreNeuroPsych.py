@@ -204,70 +204,8 @@ def ScoreOneSubject(subid):
        
     return FlatResults
 
-class PDF(fpdf.FPDF):
-    def __init__(self):
-        super().__init__()
-    def header(self):
-        self.set_font('Arial', '', 12)
-        self.cell(0, 10, 'Header', 1, 1, 'C')
-    def footer(self):
-        self.set_y(-15)
-        self.set_font('Arial', '', 12)
-        self.cell(0, 10, 'This is a Footer', 1, 0, 'C')
 
-def MakeSummaryPDF(results):    
-    ch = 8
-    pdf = PDF() # Instance of custom class
-    pdf.add_page()
-    pdf.set_font('Arial', 'B', 24)
-    pdf.cell(w=0, h=20, txt=results['subid'], ln=1)
-    pdf.set_font('Arial', '', 16)
-    pdf.cell(w=30, h=ch, txt="Date: ", ln=0)
-    pdf.cell(w=30, h=ch, txt= results['visitid'], ln=1)
 
-    pdf.ln(ch)
-    pdf.cell(w = 50, h = ch, txt="Stroop", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Number of trials", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Accuracy", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Response Time", ln = 1)
-    pdf.cell(w = 50, h = ch, txt = "   Color", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['StrpC_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpC_Acc']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpC_RT']), ln = 1)
-    pdf.cell(w = 50, h = ch, txt = "   Word", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['StrpW_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpW_Acc']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpW_RT']), ln = 1)
-    pdf.cell(w = 50, h = ch, txt = "Color/Word", ln = 1)
-    pdf.cell(w = 50, h = ch, txt = "   Congruent", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['StrpCW_Con_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpCW_Con_Acc']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpCW_Con_RT']), ln = 1)
-    pdf.cell(w = 50, h = ch, txt = "   Incongruent", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['StrpCW_Incon_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpCW_Incon_Acc']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['StrpCW_Incon_RT']), ln = 1)
-    pdf.ln(ch)
-    pdf.cell(w = 50, h = ch, txt="Antonyms", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Number Attempted", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Accuracy", ln = 1)
-    pdf.cell(w = 50, h = ch, txt="", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['Ant_NResp']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['Ant_Acc']), ln = 1)
-    pdf.ln(ch)
-    
-    pdf.cell(w = 50, h = ch, txt="Digit Span", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Number of Trials", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = "Capacity", ln = 1)
-    pdf.cell(w = 50, h = ch, txt="   Forward", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['DSFor_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['DSFor_Capacity']), ln = 1)
-    pdf.cell(w = 50, h = ch, txt="   Backward", ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:d}'.format(results['DSBack_NTrials']), ln = 0)
-    pdf.cell(w = 50, h = ch, txt = '{:0.2f}'.format(results['DSBack_Capacity']), ln = 1)
-    pdf.ln(ch)
-
-    pdf.output(f'./example.pdf', 'F')
 
 def CheckForEmpty(Results):
     # cycle over items
