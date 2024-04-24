@@ -20,15 +20,15 @@ import numpy as np
 import glob
 import datetime
 import collections
-import fpdf
+#import fpdf
 
 # What folder is this file in?
-dir_path = os.path.dirname(os.path.realpath(__file__))
-#.-
-ArithmeticErrordir_path =  '/Users/NCMLab/Documents/GitHub/CognitiveTasks'
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = '/Users/jasonsteffener/Documents/GitHub/ScoringCognitiveTasks'
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
+print(dir_path)
 print(dir_path)
 # This is expecting this repo to sit next to the repo with the task code
 sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
@@ -36,11 +36,11 @@ sys.path.append(os.path.join(dir_path, 'code'))
 
 import ProcessNeuroPsychFunctions
 import ProcessBehavioralFunctions
-import NeuropsychDataFolder
-import MakeSummarySheet
+#import NeuropsychDataFolder
+#import MakeSummarySheet
 
 # Load up the data location as a global variable
-AllInDataFolder = NeuropsychDataFolder.NeuropsychDataFolder
+AllInDataFolder = os.path.join(NeuropsychDataFolder.NeuropsychDataFolder,'RawData')
 # Where to put the summary data
 AllOutDataFolder = os.path.join(os.path.split(AllInDataFolder)[0], 'SummaryData')
 
@@ -50,7 +50,7 @@ def main():
     # Cycle over all data folders and load them up
     NewData = CycleOverDataFolders()
     # find the name of the existing results file
-    # ExistingDataFileName = LocateOutDataFile()
+    ExistingDataFileName = LocateOutDataFile()
     # print(ExistingDataFileName)
     # # Load the existing results file
     # if os.path.exists(ExistingDataFileName):
@@ -65,8 +65,8 @@ def main():
     #     WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFileName)
     # else:
     #     # There is no old data file
-    #     OldData = []
-    #     NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
+    OldData = []
+    NewData.to_csv(ExistingDataFileName, index = False, float_format='%.3f')
     return NewData
     
 def CycleOverDataFolders():
@@ -116,7 +116,7 @@ def CycleOverDataFolders():
                         FlatResults['AAChecked'] = 0
                         # Check to see if the results DF is empty or not
                         if not CheckForEmpty(Results):
-                            ListOfDict.append(FlatResults)
+                            ListOfDict.append(FlatResults)                            
             elif len(os.listdir(subdir)) > 0:
                 # This seems to be data in a subject folder with no visit folder
                 # Create the visit ID
@@ -130,7 +130,7 @@ def CycleOverDataFolders():
                 FlatResults['AAsubid'] = subid
                 # FlatResults['AAVisid'] = Visid
                 FlatResults['AAChecked'] = 0
-                ListOfDict.append(FlatResults)
+                ListOfDict._append(FlatResults)
                 
     df = pd.DataFrame(ListOfDict)
 
@@ -139,6 +139,7 @@ def CycleOverDataFolders():
     ColNameList = []
     for col in df:
         ColNameList.append(col)
+        
     # Now move the last three columns to the beginning
     ItemsToMove = ['AAsubid', 'AAChecked']
     count = 0
@@ -204,7 +205,7 @@ def ScoreOneSubject(subid):
     FlatResults['subid'] = subid
         # FlatResults['AAVisid'] = Visid
     FlatResults['visitid'] = Visid
-    MakeSummarySheet.MakeSummaryPDF(FlatResults)
+    #MakeSummarySheet.MakeSummaryPDF(FlatResults)
     return FlatResults
 
 
@@ -328,7 +329,9 @@ def LoadRawData(VisitFolder, subid):
     tempResults2 = ProcessNeuroPsychFunctions.ProcessNBack(Data2)   
     #Results['NBack'] = Reorder_NBack_Results(tempResults)
     if len(tempResults1) > 0 and len(tempResults2) > 0: 
-        AllData = Data1.append(Data2)
+        # I Left off the ignore_index=True and it was just scoring run 1
+        AllData = Data1.append(Data2, ignore_index = True)
+
         if len(AllData) > 0:
             tempResultsAll = ProcessNeuroPsychFunctions.ProcessNBack(AllData)
             Results['NBack'] = Reorder_NBack_Results(tempResultsAll)
@@ -508,7 +511,8 @@ def CreateUpdatedDataFrameOfResults(NewData, OldData):
             # Did not find the new data in the old data file
             OutDataRow = NewRow
         # Add OutDataRow to the updated out dataframe
-        OutDataFrame = OutDataFrame.append(OutDataRow)
+        OutDataFrame = OutDataFrame._append(OutDataRow)
+        
     return OutDataFrame
 
 def Reorder_DMS_VSTM_Results(Results, TaskTag):
