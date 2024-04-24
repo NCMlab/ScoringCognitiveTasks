@@ -23,8 +23,8 @@ import collections
 #import fpdf
 
 # What folder is this file in?
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-dir_path = '/Users/jasonsteffener/Documents/GitHub/ScoringCognitiveTasks'
+dir_path = os.path.dirname(os.path.realpath(__file__))
+#dir_path = '/Users/jasonsteffener/Documents/GitHub/ScoringCognitiveTasks'
 # This will load the config file containing the location of the data folder
 # If there is an error it means that the GUI program has not been run.
 # The GUI checks to see if thie config file exists. If it does not then it is created.
@@ -33,10 +33,10 @@ print(dir_path)
 # This is expecting this repo to sit next to the repo with the task code
 sys.path.append(os.path.join(dir_path, '..','CognitiveTasks','ConfigFiles'))
 sys.path.append(os.path.join(dir_path, 'code'))
-
+import NeuropsychDataFolder
 import ProcessNeuroPsychFunctions
 import ProcessBehavioralFunctions
-#import NeuropsychDataFolder
+#
 #import MakeSummarySheet
 
 # Load up the data location as a global variable
