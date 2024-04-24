@@ -630,7 +630,7 @@ def ProcessNBack(Data):
                 CurrentLoad = [j for j, x in enumerate(AllLoads) if x == i]
                 # Calculate the average responses for this load level
                 AverageHit[count] = Hit[CurrentLoad].sum()/(NTarget*len(Hit[CurrentLoad]))
-                AverageHitRT[count] = HitRT[CurrentLoad].sum()/(NTarget*len(Hit[CurrentLoad]))
+                AverageHitRT[count] = HitRT[CurrentLoad].sum()/(Hit[CurrentLoad].sum())
                 # The false alarm rate is the number of false alarms made dividied by 
                 # the total number of possible false alarms.
                 # If you are using 6 targets out out 18 trials so the number of possible
