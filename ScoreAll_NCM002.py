@@ -1,4 +1,4 @@
-0
+
 ''' Score all'''
 import os
 import sys

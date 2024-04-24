@@ -35,10 +35,14 @@ def ProcessVSTMBlockv2(Data, CapacityData):
             # Check for Time outs which are coded as Responses equal to -99
             # Remove time outs
             for index, row in temp.iterrows():
-                if row['Resp'] == -99:
-                    print('Time out!')
-                    print(index)
-                    temp = temp.drop(index)
+                try: 
+                    if int(row['Resp']) == -99:
+                        print('Time out!')
+                        print(index)
+                        temp = temp.drop(index)
+                except: 
+                    pass
+                    
             # find acc
             Acc = (temp['Corr'].mean())
             RT = (temp['RT'].mean())
@@ -53,7 +57,7 @@ def ProcessVSTMBlockv2(Data, CapacityData):
 #            Out[Tag2+'_NResp'] = NResp
             count += 1
     else:
-        Out['VSTM_Cap'] = -9999
+      #s  Out['VSTM_Cap'] = -9999
         for i in range(1,6):
             Tag1 = 'RelLoad%02d'%(i)
 #            Tag2 = 'AbsLoad%02d'%(i)
@@ -106,7 +110,7 @@ def ProcessDMSBlockv2(Data, CapacityData):
 #            Out[Tag2+'_NResp'] = NResp
             count += 1                    
     else:
-        Out['DMS_Cap'] = -9999
+        #Out['DMS_Cap'] = -9999
         for i in range(1,6):
             Tag1 = 'RelLoad%02d'%(i)
   #          Tag2 = 'AbsLoad%02d'%(i)
@@ -322,6 +326,13 @@ def ProcessStroopColor(Data):
         Out['NTrials'] = Data_Run['resp.corr'].count()
         Out['NCorr'] = Data_Run['resp.corr'].sum()
         Out['RT'] = Data_Run['resp.rt'].mean()
+        
+        Out['Vict24trials_RT'] = Data_Run['resp.rt'].head(24).sum()
+        Out['Vict24trials_NErr'] = 24 - Data_Run['resp.corr'].head(24).sum()
+        Out['Vict24trials_RT_2batch'] = Data_Run.iloc[24:48,18].sum()               
+        Out['Vict24trials_NErr_2batch'] = 24 - Data_Run.iloc[24:48,17].sum()
+
+        
     else:
         Out = collections.OrderedDict()
         Out['Acc'] = -9999
@@ -346,6 +357,10 @@ def ProcessStroopWord(Data):
         Out['NTrials'] = Data_Run['resp.corr'].count()
         Out['NCorr'] = Data_Run['resp.corr'].sum()
         Out['RT'] = Data_Run['resp.rt'].mean()
+        Out['Vict24trials_RT'] = Data_Run['resp.rt'].head(24).sum()
+        Out['Vict24trials_NErr'] = 24 - Data_Run['resp.corr'].head(24).sum()
+        Out['Vict24trials_RT_2batch'] = Data_Run.iloc[24:48,18].sum()               
+        Out['Vict24trials_NErr_2batch'] = 24 - Data_Run.iloc[24:48,17].sum()
     else:
         Out = collections.OrderedDict()
         Out['Acc'] = -9999
@@ -353,7 +368,7 @@ def ProcessStroopWord(Data):
         Out['NCorr'] = -9999   
         Out['RT'] = -9999         
     return Out    
-    
+
 def ProcessStroopColorWord(Data):
     # Stroop color uses the shape color to determine the test colors which is the 
     # same as the TEXT color
@@ -380,7 +395,10 @@ def ProcessStroopColorWord(Data):
         Out['Incon_NTrials'] = Data_Run_Incon['resp.corr'].count()
         Out['Incon_NCorr'] = Data_Run_Incon['resp.corr'].sum()
         Out['Incon_RT'] = Data_Run_Incon['resp.rt'].mean()  
-        #               
+        Out['Vict24trials_RT'] = Data_Run_Incon['resp.rt'].head(24).sum()
+        Out['Vict24trials_NErr'] = 24 - Data_Run_Incon['resp.corr'].head(24).sum()
+        Out['Vict24trials_RT_2batch'] = Data_Run_Incon.iloc[24:48,18].sum()               
+        Out['Vict24trials_NErr_2batch'] = 24 - Data_Run_Incon.iloc[24:48,17].sum()
         # Out['Acc'] = pd.pivot_table(Data_Run, values = 'resp.corr', index = 'Congruency', aggfunc = np.mean)
         # Out['NCorr'] = pd.pivot_table(Data_Run, values = 'resp.corr', index = 'Congruency', aggfunc = np.sum)
         # Out['NTrials'] = pd.pivot_table(Data_Run, values = 'resp.corr', index = 'Congruency', aggfunc = 'count')
@@ -562,6 +580,7 @@ def ProcessSRTDelay(Data):
 def ProcessNBack(Data):
     try:
         Out = collections.OrderedDict()
+        #UniqueLoads=[0,1,2]
         if len(Data) > 0:
             # Use the presentation of instructions to differentiate the blocks
             InstrRows = Data[Data['Stimulus'].str.match('Instructions')]

@@ -18,6 +18,24 @@ class PDF(fpdf.FPDF):
         self.set_font('Arial', '', 12)
         self.cell(0, 10, 'Neurocognitive Mapping Laboratory, University of Ottawa, Canada', 1, 0, 'C')
 
+''' Normative data
+Stroop_VictoriaInter_NCM_Young_RawMean = 1.415801766
+Stroop_VictoriaInter_NCM_Young_RawSTD = 0.205181135
+Stroop_VictoriaInter_NCM_Young_RawN = 50
+Stroop_VictoriaInter_NCM_Old_RawMean = 1.615588408
+Stroop_VictoriaInter_NCM_Old_RawSTD = 0.247573225
+Stroop_VictoriaInter_NCM_Old_RawN = 42
+Stroop_VictoriaInter_CLSA_Old_RawMean = 2.159
+Stroop_VictoriaInter_CLSA_Old_RawNSTD = 0.731
+Stroop_VictoriaInter_CLSA_Old_RawN = 29675
+Stroop_NCMInter_NCM_Young_RawMean = 1.318152463
+Stroop_NCMInter_NCM_Young_RawSTD = 0.165441421
+Stroop_NCMInter_NCM_Young_RawN = 50
+Stroop_NCMInter_NCM_Old_RawMean = 1.390883002
+Stroop_NCMInter_NCM_Old_RawSTD = 0.370165985
+Stroop_NCMInter_NCM_Old_RawN = 45
+'''
+
 
 def MakeSummaryPDF(results):    
     ch = 6
@@ -172,23 +190,27 @@ def MakeSummaryPDF(results):
     pdf.cell(w = 30, h = ch, txt = "F.A. RT", ln = 1)
     pdf.set_font('Arial', '', 12)
     pdf.cell(w = 30, h = ch, txt = "   Load 0", ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load00_N']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_HIT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_HitRT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_FA']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_FaRT']), ln = 1)
-    pdf.cell(w = 30, h = ch, txt = "   Load 1", ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load01_N']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_HIT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_HitRT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_FA']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_FaRT']), ln = 1)
-    pdf.cell(w = 30, h = ch, txt = "   Load 2", ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load02_N']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_HIT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_HitRT']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_FA']), ln = 0)
-    pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_FaRT']), ln = 1)    
+    try:
+        pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load00_N']), ln = 0)        
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_HIT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_HitRT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load00_FA']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load00_FaRT']), ln = 1)
+        pdf.cell(w = 30, h = ch, txt = "   Load 1", ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load01_N']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_HIT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_HitRT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load01_FA']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load01_FaRT']), ln = 1)
+        pdf.cell(w = 30, h = ch, txt = "   Load 2", ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.1f}'.format(results['NBack_Load02_N']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_HIT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_HitRT']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.2f}'.format(results['NBack_Load02_FA']), ln = 0)
+        pdf.cell(w = 30, h = ch, txt = '{:0.3f}'.format(results['NBack_Load02_FaRT']), ln = 1)    
+    except:
+        pass
+    
     fname_out = './' + results['subid'] + '_' + results['visitid'] + '.pdf'
     pdf.output(fname_out, 'F')
     

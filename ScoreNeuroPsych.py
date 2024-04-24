@@ -99,7 +99,7 @@ def CycleOverDataFolders():
                 for visFold in VisitFolders:
                     CurVis = os.path.split(visFold)[0]
                     CurVis = os.path.split(CurVis)[-1]
-                    if CurVis[-4:-2] == 'V0':
+                    if CurVis[-4:] == 'V001':
                         # From the directory structre extract the subject ID and the visit ID
                         subid = CurDir
                         ScoreOneSubject(subid)
@@ -174,7 +174,7 @@ def ScoreOneSubject(subid):
             CurVis = os.path.split(CurVis)[-1]
             
             print(CurVis)
-            if CurVis[-4:-2] == 'V0':
+            if CurVis[-4:] == 'V001':
                 # From the directory structre extract the subject ID and the visit ID
                 
                 Visid = CurVis
@@ -204,7 +204,7 @@ def ScoreOneSubject(subid):
     FlatResults['subid'] = subid
         # FlatResults['AAVisid'] = Visid
     FlatResults['visitid'] = Visid
-    MakeSummarySheet.MakeSummaryPDF(FlatResults)
+ #   MakeSummarySheet.MakeSummaryPDF(FlatResults)
     return FlatResults
 
 
@@ -561,4 +561,5 @@ def WriteOutNewdataMoveOldData(UpdatedData, UpdatedDataFileName, ExistingDataFil
     UpdatedData.to_csv(UpdatedDataFileName, index = False, float_format='%.3f')    
 # #       
 if __name__ == "__main__":
-    main()
+    #main()
+    pass
